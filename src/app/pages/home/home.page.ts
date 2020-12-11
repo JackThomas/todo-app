@@ -1,6 +1,9 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Plugins, StatusBarAnimation, StatusBarAnimationOptions } from '@capacitor/core';
 import { IonRouterOutlet, ModalController } from '@ionic/angular';
 import { ModalPage } from 'src/app/pages/modal/modal.page';
+
+const { StatusBar } = Plugins;
 
 @Component({
   selector: 'app-home',
@@ -13,6 +16,13 @@ export class HomePage {
   public day: any;
   public month: any;
   public scrollPosition: any;
+
+  public slideOpts = {
+    slidesPerView: 'auto',
+    centeredSlides: false,
+    freeMode: true,
+    pagination: false,
+  };
 
   constructor(private modalCtrl: ModalController, private routerOutlet: IonRouterOutlet) {
     const date = new Date();
@@ -59,7 +69,26 @@ export class HomePage {
       top: $event.detail.scrollTop,
       left: $event.detail.scrollLeft,
     };
+    this.handleStatusBar();
     this.handleBackground();
+  }
+
+  /**
+   * handleStatusBar
+   */
+  public handleStatusBar() {
+    const scrollTop = this.scrollPosition.top;
+    const scrollDistance = this.container.nativeElement.clientHeight / 2 + 10; // get safe area top
+    const hideStatusbar = scrollTop > scrollDistance;
+    const statusBarOptions: StatusBarAnimationOptions = {
+      animation: StatusBarAnimation.Fade,
+    };
+
+    if (hideStatusbar) {
+      StatusBar.hide(statusBarOptions);
+    } else {
+      StatusBar.show(statusBarOptions);
+    }
   }
 
   /**
@@ -69,11 +98,8 @@ export class HomePage {
     const scrollTop = this.scrollPosition.top;
     const scrollDistance = this.container.nativeElement.clientHeight / 2 - 70;
     const isAtEnd = scrollTop >= scrollDistance;
+    const colour = isAtEnd ? '#ffffff' : '#000000';
 
-    if (isAtEnd) {
-      this.container.nativeElement.style.setProperty('--backdrop-background-pseudo', '#ffffff');
-    } else {
-      this.container.nativeElement.style.removeProperty('--backdrop-background-pseudo');
-    }
+    this.container.nativeElement.style.setProperty('--backdrop-background-pseudo', colour);
   }
 }
