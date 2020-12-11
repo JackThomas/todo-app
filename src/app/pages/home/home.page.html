@@ -1,0 +1,15 @@
+<ion-content
+  #container
+  [fullscreen]="true"
+  [forceOverscroll]="true"
+  [scrollEvents]="true"
+  (ionScroll)="scrollEvent($event)"
+>
+  <div class="backdrop">
+    <p class="title">Today</p>
+    <p class="subtitle">{{ day }}<sup>{{ getDateOrdinal(day) }}</sup> {{ month }}</p>
+  </div>
+  <div class="main">
+    <ion-button (click)="presentModal()">Open modal</ion-button>
+  </div>
+</ion-content>
