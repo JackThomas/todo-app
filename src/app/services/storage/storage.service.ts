@@ -49,7 +49,7 @@ export class StorageService {
     return from(Storage.get({ key })).pipe(
       map((response: any) => {
         if (response.value !== null) {
-          return JSON.parse(unescape(atob(response.value)));
+          return JSON.parse(this.decrypt(response.value));
         }
         return response.value;
       })

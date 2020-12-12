@@ -17,10 +17,21 @@ export class DataService {
    *
    * @returns Observable<any>
    */
-  public get(key: string, id: string = ''): Observable<any> {
-    return from(this.storage.get(key)).pipe(
+  public async get(key: string): Promise<any> {
+    return await this.storage.get(key);
+  }
+
+  /**
+   * getObservable
+   *
+   * @param url the route of the resources needed
+   *
+   * @returns Observable<any>
+   */
+  public getObservable(key: string): Observable<any> {
+    return from(this.storage.getObservable(key)).pipe(
       map((response: StorageItem) => {
-        return [response.data];
+        return response;
       }),
       catchError(this.errorHandler)
     );

@@ -48,7 +48,6 @@ export class HomePage {
     const modal = await this.modalCtrl.create({
       component: ModalPage,
       swipeToClose: true,
-
       presentingElement: this.routerOutlet.nativeEl,
     });
 
