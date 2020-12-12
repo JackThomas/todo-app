@@ -11,43 +11,9 @@
       <p class="subtitle">{{ day }}<sup>{{ getDateOrdinal(day) }}</sup> {{ month }}</p>
     </div>
 
-    <ion-slides class="list-panel-slider" pager="true" [options]="slideOpts">
-      <ion-slide class="list-panel-slide">
-        <div class="list-panel list-panel--1">
-          <p class="list-panel__count">3</p>
-          <p class="list-panel__detail">
-            <span class="list-panel__detail-value">3</span>/<span class="list-panel__detail-value"
-              >4</span
-            >
-            completed
-          </p>
-        </div>
-      </ion-slide>
-      <ion-slide class="list-panel-slide">
-        <div class="list-panel list-panel--2">
-          <p class="list-panel__count">3</p>
-          <p class="list-panel__detail">
-            <span class="list-panel__detail-value">3</span>/<span class="list-panel__detail-value"
-              >4</span
-            >
-            completed
-          </p>
-        </div>
-      </ion-slide>
-      <ion-slide class="list-panel-slide">
-        <div class="list-panel list-panel--3">
-          <p class="list-panel__count">3</p>
-          <p class="list-panel__detail">
-            <span class="list-panel__detail-value">3</span>/<span class="list-panel__detail-value"
-              >4</span
-            >
-            completed
-          </p>
-        </div>
-      </ion-slide>
-    </ion-slides>
+    <app-group-slider></app-group-slider>
   </div>
-  <div class="main">
+  <div class="main" #main>
     <ion-button (click)="presentModal()">Open modal</ion-button>
   </div>
 </ion-content>

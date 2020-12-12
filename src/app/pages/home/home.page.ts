@@ -12,17 +12,11 @@ const { StatusBar } = Plugins;
 })
 export class HomePage {
   @ViewChild('container', { read: ElementRef, static: false }) container: any;
+  @ViewChild('main', { read: ElementRef, static: true }) main: any;
 
   public day: any;
   public month: any;
   public scrollPosition: any;
-
-  public slideOpts = {
-    slidesPerView: 'auto',
-    centeredSlides: false,
-    freeMode: true,
-    pagination: false,
-  };
 
   constructor(private modalCtrl: ModalController, private routerOutlet: IonRouterOutlet) {
     const date = new Date();
@@ -96,7 +90,7 @@ export class HomePage {
    */
   public handleBackground() {
     const scrollTop = this.scrollPosition.top;
-    const scrollDistance = this.container.nativeElement.clientHeight / 2 - 70;
+    const scrollDistance = this.main.nativeElement.clientHeight - 70;
     const isAtEnd = scrollTop >= scrollDistance;
     const colour = isAtEnd ? '#ffffff' : '#000000';
 

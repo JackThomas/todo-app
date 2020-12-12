@@ -1,0 +1,32 @@
+.list-panel-slider {
+  padding-left: 16px;
+}
+
+.list-panel-slide {
+  width: auto;
+  margin-right: 16px;
+}
+
+.list-panel {
+  font-weight: 700;
+  width: 130px;
+  height: 130px;
+  padding: 16px;
+  color: #ffffff;
+  border-radius: 10px;
+  background-color: var(--panel-background);
+
+  &--1 {
+    --panel-background: #6a42d2;
+  }
+  &--2 {
+    --panel-background: #168db9;
+  }
+  &--3 {
+    --panel-background: #1b57d0;
+  }
+
+  &--create {
+    --panel-background: #1b57d0;
+  }
+}

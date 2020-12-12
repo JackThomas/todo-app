@@ -9,11 +9,14 @@ ion-content {
 }
 
 .backdrop {
+  display: flex;
+  flex-direction: column;
   position: fixed;
   z-index: 5;
   top: 0;
   width: 100%;
   height: 50vh;
+  padding-bottom: 16px;
   background-color: var(--backdrop-background);
 
   &:after {
@@ -28,7 +31,8 @@ ion-content {
 }
 
 .content {
-  padding: 15vh 16px 0 16px;
+  margin-bottom: auto;
+  padding: 13vh 16px 0 16px;
 }
 .title {
   font-size: 34px;
@@ -52,38 +56,11 @@ ion-content {
   justify-content: center;
   position: relative;
   z-index: 10;
-  min-height: calc(100vh - 60px);
-  margin-top: calc(50vh + 60px);
+  min-height: 50vh;
+  max-height: calc(100vh - 60px);
+  margin-top: 50vh;
   padding: 10vh 16px;
   border-top-left-radius: 38.5px;
   border-top-right-radius: 38.5px;
   background-color: #ffffff;
-}
-
-.list-panel-slider {
-  margin-top: 30px;
-  padding-left: 16px;
-}
-
-.list-panel-slide {
-  width: auto;
-  margin-right: 16px;
-}
-
-.list-panel {
-  font-weight: 700;
-  padding: 16px;
-  color: #ffffff;
-  border-radius: 10px;
-  background-color: var(--panel-background);
-
-  &--1 {
-    --panel-background: #6a42d2;
-  }
-  &--2 {
-    --panel-background: #168db9;
-  }
-  &--3 {
-    --panel-background: #1b57d0;
-  }
 }

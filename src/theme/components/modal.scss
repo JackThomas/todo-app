@@ -1,0 +1,19 @@
+/* --------------------------------
+   Modal
+   -------------------------------- */
+
+.modal {
+  &--half {
+    --height: 50vh;
+    padding-top: 50vh;
+
+    .modal-shadow {
+      pointer-events: none;
+    }
+
+    .modal-wrapper {
+      border-top-left-radius: 38.5px;
+      border-top-right-radius: 38.5px;
+    }
+  }
+}
