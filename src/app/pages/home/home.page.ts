@@ -89,9 +89,12 @@ export class HomePage {
    */
   public handleBackground() {
     const scrollTop = this.scrollPosition.top;
-    const scrollDistance = this.main.nativeElement.clientHeight - 70;
-    const isAtEnd = scrollTop >= scrollDistance;
+    // const scrollDistance = this.main.nativeElement.clientHeight - 70;
+    const isAtEnd = scrollTop >= 0;
     const colour = isAtEnd ? '#ffffff' : '#000000';
+    console.log('scrollTop', scrollTop);
+    // console.log('scrollDistance', scrollDistance);
+    // console.log(scrollTop >= scrollDistance);
 
     this.container.nativeElement.style.setProperty('--backdrop-background-pseudo', colour);
   }
