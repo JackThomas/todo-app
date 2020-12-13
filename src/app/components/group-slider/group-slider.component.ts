@@ -1,17 +1,27 @@
-import { ListService } from 'src/app/services/list/list.service';
-import { Component, OnInit, Self } from '@angular/core';
-import { AnimationController, ModalController } from '@ionic/angular';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { ModalController } from '@ionic/angular';
 import { iosLeaveAnimation } from 'src/app/animations/fade-out/fade-out';
 import { ListPage } from 'src/app/pages/create/list/list.page';
 import { List } from 'src/app/interfaces/list';
-
+import { ListService } from 'src/app/services/list/list.service';
+import { trigger, state, style, animate, transition } from '@angular/animations';
 @Component({
   selector: 'app-group-slider',
   templateUrl: './group-slider.component.html',
   styleUrls: ['./group-slider.component.scss'],
+  animations: [
+    trigger('fadeIn', [
+      transition(':enter', [
+        style({ opacity: '0', width: '0' }),
+        animate('.5s ease-out', style({ opacity: '1', width: '130px' })),
+      ]),
+    ]),
+  ],
 })
-export class GroupSliderComponent implements OnInit {
+export class GroupSliderComponent implements OnInit, AfterViewInit {
   lists: List[];
+
+  enableAnimation: boolean = true;
 
   public sliderOptions = {
     slidesPerView: 'auto',
@@ -25,10 +35,28 @@ export class GroupSliderComponent implements OnInit {
     this.getLists();
   }
 
+  ngAfterViewInit() {
+    this.enableAnimation = true;
+  }
+
+  /**
+   * getLists
+   */
   getLists() {
     this.listService.get().subject.subscribe((data) => {
-      this.lists = data;
+      if (data) {
+        this.lists = data.sort((a, b) => {
+          return new Date(b.created).getTime() - new Date(a.created).getTime();
+        });
+      }
     });
+  }
+
+  /**
+   * onAnimationEvent
+   */
+  onAnimationEvent($event) {
+    console.log($event);
   }
 
   /**

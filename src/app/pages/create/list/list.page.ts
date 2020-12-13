@@ -34,7 +34,7 @@ export class ListPage implements OnInit {
       .transformData(this.form.value)
       .create()
       .then(() => {
-        console.log('done');
+        console.log('List created');
       })
       .catch((error) => {
         console.log(error);

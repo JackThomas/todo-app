@@ -15,12 +15,15 @@ export class HomePage {
   @ViewChild('main', { read: ElementRef, static: true }) main: any;
 
   public day: any;
+  public dayLong: any;
   public month: any;
   public scrollPosition: any;
 
   constructor(private modalCtrl: ModalController, private routerOutlet: IonRouterOutlet) {
     const date = new Date();
+
     this.day = date.toLocaleString('default', { day: 'numeric' });
+    this.dayLong = date.toLocaleString('default', { weekday: 'long' });
     this.month = date.toLocaleString('default', { month: 'long' });
   }
 

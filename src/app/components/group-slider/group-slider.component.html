@@ -4,7 +4,12 @@
       <ion-button (click)="presentCreateList()">Create</ion-button>
     </div>
   </ion-slide>
-  <ion-slide class="list-panel-slide" *ngFor="let list of lists">
+  <ion-slide
+    class="list-panel-slide"
+    *ngFor="let list of lists"
+    [@fadeIn]="enableAnimation"
+    (@fadeIn.done)="onAnimationEvent($event)"
+  >
     <div class="list-panel list-panel--2">
       <p>{{ list.title }}</p>
       <!-- <p class="list-panel__count">3</p>

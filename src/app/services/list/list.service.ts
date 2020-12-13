@@ -52,7 +52,7 @@ export class ListService {
       return this.dataService
         .save(listStorageKey, this.lists)
         .then(() => {
-          console.log('data saved');
+          console.log('Data saved');
         })
         .catch((error) => {
           console.log(error);
