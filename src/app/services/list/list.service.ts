@@ -12,10 +12,12 @@ const listStorageKey = 'lists';
 })
 export class ListService {
   subject: BehaviorSubject<any> = new BehaviorSubject(false);
+  selected: BehaviorSubject<any> = new BehaviorSubject(false);
 
   lists: List[];
 
   data: List = {
+    active: false,
     colour: {
       name: '',
       hex: '',
@@ -28,8 +30,12 @@ export class ListService {
 
   constructor(private dataService: DataService) {}
 
+  /**
+   * clear
+   */
   clear() {
     this.data = {
+      active: false,
       colour: {
         name: '',
         hex: '',
@@ -43,6 +49,9 @@ export class ListService {
     return this;
   }
 
+  /**
+   * create
+   */
   async create() {
     return await this.dataService.get(listStorageKey).then((response) => {
       this.lists = response.data !== undefined ? response.data : [];
@@ -60,6 +69,37 @@ export class ListService {
     });
   }
 
+  /**
+   * update
+   */
+  async update(list: List, data: any) {
+    return await this.dataService.get(listStorageKey).then((response) => {
+      const lists = response.data !== undefined ? response.data : [];
+      const updated = lists.map((listItem) => {
+        if (listItem.id !== list.id) {
+          return listItem;
+        } else {
+          return { ...listItem, ...data };
+        }
+      });
+
+      this.subject.next(updated);
+      this.updateSelected(list);
+
+      return this.dataService
+        .save(listStorageKey, updated)
+        .then(() => {
+          console.log('Data updated');
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    });
+  }
+
+  /**
+   * get
+   */
   get() {
     this.dataService.get(listStorageKey).then((response) => {
       this.lists = response.data !== undefined ? response.data : [];
@@ -69,10 +109,36 @@ export class ListService {
     return this;
   }
 
+  /**
+   * select
+   */
+  async select(list: List) {
+    return await this.dataService.get(listStorageKey).then((response) => {
+      const lists = response.data !== undefined ? response.data : [];
+      const selected = lists.find((listItem) => listItem.id === list.id);
+
+      this.selected.next(selected);
+    });
+  }
+
+  /**
+   * updateSelected
+   */
+  async updateSelected(list: List) {
+    if (list.id === this.selected.value.id) {
+      const selected = this.subject.value.find((listItem) => listItem.id === list.id);
+      this.selected.next(selected);
+    }
+  }
+
+  /**
+   * transformData
+   */
   transformData(data) {
     console.log(data);
 
     this.data = {
+      active: false,
       colour: {
         name: 'Blue Green',
         hex: '#168db9',

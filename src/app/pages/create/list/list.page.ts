@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ModalController } from '@ionic/angular';
 import { ListService } from 'src/app/services/list/list.service';
 
 @Component({
@@ -10,7 +11,11 @@ import { ListService } from 'src/app/services/list/list.service';
 export class ListPage implements OnInit {
   form: FormGroup;
 
-  constructor(private formBuilder: FormBuilder, private listService: ListService) {}
+  constructor(
+    private formBuilder: FormBuilder,
+    private listService: ListService,
+    private modalCtrl: ModalController
+  ) {}
 
   ngOnInit() {
     this.createForm();
@@ -35,9 +40,20 @@ export class ListPage implements OnInit {
       .create()
       .then(() => {
         console.log('List created');
+        this.dismissModal();
       })
       .catch((error) => {
+        this.dismissModal();
         console.log(error);
       });
+  }
+
+  /**
+   * dismissModal
+   */
+  dismissModal() {
+    this.modalCtrl.dismiss({
+      dismissed: true,
+    });
   }
 }

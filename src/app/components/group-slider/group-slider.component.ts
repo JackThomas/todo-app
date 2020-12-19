@@ -1,42 +1,40 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { iosLeaveAnimation } from 'src/app/animations/fade-out/fade-out';
+import { iosLeaveAnimation } from 'src/app/animations/modal/fade-out/fade-out';
 import { ListPage } from 'src/app/pages/create/list/list.page';
 import { List } from 'src/app/interfaces/list';
 import { ListService } from 'src/app/services/list/list.service';
-import { trigger, state, style, animate, transition } from '@angular/animations';
+import { listItemFadeIn } from 'src/app/animations/list-item/fade-in/fade-in';
+import { PaneService } from 'src/app/services/pane/pane.service';
 @Component({
   selector: 'app-group-slider',
   templateUrl: './group-slider.component.html',
   styleUrls: ['./group-slider.component.scss'],
-  animations: [
-    trigger('fadeIn', [
-      transition(':enter', [
-        style({ opacity: '0', width: '0' }),
-        animate('.5s ease-out', style({ opacity: '1', width: '130px' })),
-      ]),
-    ]),
-  ],
+  animations: [listItemFadeIn],
 })
 export class GroupSliderComponent implements OnInit, AfterViewInit {
-  lists: List[];
-
   enableAnimation: boolean = true;
+  lists: List[];
 
   public sliderOptions = {
     slidesPerView: 'auto',
     centeredSlides: false,
     pagination: false,
+    freeMode: true,
+    freeModeSticky: true,
   };
 
-  constructor(private listService: ListService, private modalCtrl: ModalController) {}
+  constructor(
+    private listService: ListService,
+    private paneService: PaneService,
+    private modalCtrl: ModalController
+  ) {}
 
-  ngOnInit() {
-    this.getLists();
-  }
+  ngOnInit() {}
 
   ngAfterViewInit() {
     this.enableAnimation = true;
+    this.getLists();
   }
 
   /**
@@ -55,8 +53,18 @@ export class GroupSliderComponent implements OnInit, AfterViewInit {
   /**
    * onAnimationEvent
    */
-  onAnimationEvent($event) {
-    console.log($event);
+  listItemFadeInEnd($event, list: List) {
+    if (list.active === false) {
+      this.listService.update(list, { active: true });
+    }
+  }
+
+  /**
+   * selectList
+   */
+  selectList(list: List) {
+    this.listService.select(list);
+    this.paneService.presentPane();
   }
 
   /**

@@ -1,7 +1,6 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { Plugins, StatusBarAnimation, StatusBarAnimationOptions } from '@capacitor/core';
-import { IonRouterOutlet, ModalController } from '@ionic/angular';
-import { ModalPage } from 'src/app/pages/modal/modal.page';
+import { Capacitor, Plugins, StatusBarAnimation, StatusBarAnimationOptions } from '@capacitor/core';
+import { CupertinoPane, CupertinoSettings } from 'cupertino-pane';
 
 const { StatusBar } = Plugins;
 
@@ -19,7 +18,7 @@ export class HomePage {
   public month: any;
   public scrollPosition: any;
 
-  constructor(private modalCtrl: ModalController, private routerOutlet: IonRouterOutlet) {
+  constructor() {
     const date = new Date();
 
     this.day = date.toLocaleString('default', { day: 'numeric' });
@@ -45,19 +44,6 @@ export class HomePage {
   }
 
   /**
-   * presentModal
-   */
-  public async presentModal() {
-    const modal = await this.modalCtrl.create({
-      component: ModalPage,
-      swipeToClose: true,
-      presentingElement: this.routerOutlet.nativeEl,
-    });
-
-    await modal.present();
-  }
-
-  /**
    * scrollEvent
    */
   public scrollEvent($event): void {
@@ -65,40 +51,39 @@ export class HomePage {
       top: $event.detail.scrollTop,
       left: $event.detail.scrollLeft,
     };
-    this.handleStatusBar();
-    this.handleBackground();
+    // this.handleStatusBar();
+    // this.handleBackground();
   }
 
-  /**
-   * handleStatusBar
-   */
-  public handleStatusBar() {
-    const scrollTop = this.scrollPosition.top;
-    const scrollDistance = this.container.nativeElement.clientHeight / 2 + 10; // get safe area top
-    const hideStatusbar = scrollTop > scrollDistance;
-    const statusBarOptions: StatusBarAnimationOptions = {
-      animation: StatusBarAnimation.Fade,
-    };
+  // /**
+  //  * handleStatusBar
+  //  */
+  // public handleStatusBar() {
+  //   if (!Capacitor.isPluginAvailable('StatusBar')) {
+  //     return false;
+  //   }
 
-    if (hideStatusbar) {
-      StatusBar.hide(statusBarOptions);
-    } else {
-      StatusBar.show(statusBarOptions);
-    }
-  }
+  //   const scrollTop = this.scrollPosition.top;
+  //   const scrollDistance = this.container.nativeElement.clientHeight / 2 + 10; // get safe area top
+  //   const hideStatusbar = scrollTop > scrollDistance;
+  //   const statusBarOptions: StatusBarAnimationOptions = {
+  //     animation: StatusBarAnimation.Fade,
+  //   };
 
-  /**
-   * handleBackground
-   */
-  public handleBackground() {
-    const scrollTop = this.scrollPosition.top;
-    // const scrollDistance = this.main.nativeElement.clientHeight - 70;
-    const isAtEnd = scrollTop >= 0;
-    const colour = isAtEnd ? '#ffffff' : '#000000';
-    console.log('scrollTop', scrollTop);
-    // console.log('scrollDistance', scrollDistance);
-    // console.log(scrollTop >= scrollDistance);
+  //   if (hideStatusbar) {
+  //     StatusBar.hide(statusBarOptions);
+  //   } else {
+  //     StatusBar.show(statusBarOptions);
+  //   }
+  // }
 
-    this.container.nativeElement.style.setProperty('--backdrop-background-pseudo', colour);
-  }
+  // /**
+  //  * handleBackground
+  //  */
+  // public handleBackground() {
+  //   const scrollTop = this.scrollPosition.top;
+  //   const isAtEnd = scrollTop >= 0;
+  //   const colour = isAtEnd ? '#ffffff' : '#000000';
+  //   this.container.nativeElement.style.setProperty('--backdrop-background-pseudo', colour);
+  // }
 }
