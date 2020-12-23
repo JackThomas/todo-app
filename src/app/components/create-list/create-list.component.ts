@@ -74,7 +74,6 @@ export class CreateListComponent implements OnInit {
         bottom: { enabled: true },
       },
       bottomClose: true,
-      topperOverflow: false,
       onDidPresent: () => {
         this.paneService.onDidPresent();
       },

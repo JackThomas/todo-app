@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CupertinoPane, CupertinoSettings } from 'cupertino-pane';
 import { PaneType } from 'src/app/enums/paneTypes.enum';
+import { List } from 'src/app/interfaces/list';
 import { ListService } from 'src/app/services/list/list.service';
 import { PaneService } from 'src/app/services/pane/pane.service';
 
@@ -14,6 +15,7 @@ export class CreateItemComponent implements OnInit {
   enable: boolean = false;
   form: FormGroup;
 
+  list: List;
   cupertinoPane: CupertinoPane;
 
   constructor(
@@ -23,8 +25,20 @@ export class CreateItemComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.getSelected();
     this.createForm();
     this.initPane();
+  }
+
+  /**
+   * getSelected
+   */
+  getSelected() {
+    this.listService.selected.subscribe((list: List) => {
+      if (list) {
+        this.list = list;
+      }
+    });
   }
 
   /**
@@ -34,7 +48,6 @@ export class CreateItemComponent implements OnInit {
     this.enable = true;
     this.form = this.formBuilder.group({
       name: ['', Validators.compose([Validators.required])],
-      colour: ['', Validators.compose([Validators.required])],
     });
   }
 
@@ -43,10 +56,11 @@ export class CreateItemComponent implements OnInit {
    */
   submitForm() {
     this.listService
-      .transformData(this.form.value)
-      .create()
+      .transformItem(this.form.value)
+      .addItem(this.list)
       .then(() => {
         console.log('List created');
+        this.cupertinoPane.hide();
       })
       .catch((error) => {
         console.log(error);
@@ -70,17 +84,26 @@ export class CreateItemComponent implements OnInit {
         middle: { enabled: true, height: window.screen.height * 0.5, bounce: true },
         bottom: { enabled: true, height: 80 },
       },
-      onDragStart: () => this.paneService.onDragStart(),
-      onDrag: () => this.paneService.onDrag(this.cupertinoPane),
-      onDragEnd: () => this.paneService.onDragEnd(),
+      onDidPresent: () => {
+        this.paneService.onDidPresent();
+      },
+      onDrag: () => {
+        this.paneService.onDrag(this.cupertinoPane);
+      },
       onBackdropTap: () => this.cupertinoPane.hide(),
+      onTransitionStart: ($event) => {
+        this.paneService.onTransitionStart($event, this.cupertinoPane);
+        this.paneService.fixedBottomAnimate(this.cupertinoPane);
+      },
     };
     this.cupertinoPane = new CupertinoPane('.pane.pane--create-item', settings);
+    this.paneService.fixedBottom(this.paneService, this.cupertinoPane);
 
     this.paneService.present.subscribe((type: PaneType) => {
       console.log('present');
       if (type === PaneType.CreateItem) {
         this.presentPane();
+        this.paneService.watch(this.cupertinoPane, this.paneService.fixedBottom);
       }
     });
   }

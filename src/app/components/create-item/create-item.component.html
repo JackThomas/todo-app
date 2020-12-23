@@ -7,11 +7,14 @@
           <ion-label position="stacked">Title</ion-label>
           <ion-input inputMode="text" formControlName="name"></ion-input>
         </ion-item>
-
-        <ion-item>
-          <ion-button type="submit" expand="block"> Create </ion-button>
-        </ion-item>
       </ion-list>
     </form>
+    <div class="body-fixed">
+      <div class="body-fixed__inner">
+        <ion-button type="submit" expand="block" (click)="submitForm()" [disabled]="!form?.valid">
+          Create
+        </ion-button>
+      </div>
+    </div>
   </div>
 </div>

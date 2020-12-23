@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { DataService } from 'src/app/services/data/data.service';
 import { List } from 'src/app/interfaces/list';
+import { Item } from 'src/app/interfaces/item';
 import { v4 as uuid } from 'uuid';
+import { Status } from 'src/app/enums/status.enum';
 
 const listStorageKey = 'lists';
 
@@ -26,6 +28,8 @@ export class ListService {
     items: [],
     title: '',
   };
+
+  item: Item;
 
   constructor(private dataService: DataService) {}
 
@@ -131,6 +135,13 @@ export class ListService {
   }
 
   /**
+   * addItem
+   */
+  async addItem(list: List) {
+    this.update(list, { items: [...list.items, this.item] });
+  }
+
+  /**
    * transformData
    */
   transformData(data) {
@@ -142,6 +153,24 @@ export class ListService {
       created: new Date(),
       id: uuid(),
       items: [],
+      title: data.name,
+    };
+
+    return this;
+  }
+
+  /**
+   * transformItem
+   */
+  transformItem(data) {
+    console.log(data);
+
+    this.item = {
+      due: data.due,
+      items: data.items,
+      note: data.note,
+      priority: data.priority,
+      status: Status.Pending,
       title: data.name,
     };
 
