@@ -1,45 +1,56 @@
-import { Status } from './../../enums/status.enum';
 import { Component, OnInit } from '@angular/core';
-import { List } from 'src/app/interfaces/list';
-import { ListService } from 'src/app/services/list/list.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CupertinoPane, CupertinoSettings } from 'cupertino-pane';
-import { PaneService } from 'src/app/services/pane/pane.service';
 import { PaneType } from 'src/app/enums/paneTypes.enum';
+import { ListService } from 'src/app/services/list/list.service';
+import { PaneService } from 'src/app/services/pane/pane.service';
 
 @Component({
-  selector: 'app-list',
-  templateUrl: './list.component.html',
-  styleUrls: ['./list.component.scss'],
+  selector: 'app-create-item',
+  templateUrl: './create-item.component.html',
+  styleUrls: ['./create-item.component.scss'],
 })
-export class ListComponent implements OnInit {
-  list: List;
-  public cupertinoPane: CupertinoPane;
+export class CreateItemComponent implements OnInit {
+  enable: boolean = false;
+  form: FormGroup;
 
-  constructor(private listService: ListService, private paneService: PaneService) {}
+  cupertinoPane: CupertinoPane;
+
+  constructor(
+    private formBuilder: FormBuilder,
+    private listService: ListService,
+    private paneService: PaneService
+  ) {}
 
   ngOnInit() {
-    this.getSelected();
+    this.createForm();
     this.initPane();
   }
 
   /**
-   * getSelected
+   * createForm
    */
-  getSelected() {
-    this.listService.selected.subscribe((list: List) => {
-      if (list) {
-        this.list = list;
-      }
+  createForm() {
+    this.enable = true;
+    this.form = this.formBuilder.group({
+      name: ['', Validators.compose([Validators.required])],
+      colour: ['', Validators.compose([Validators.required])],
     });
   }
 
   /**
-   * addItem
+   * submitForm
    */
-  addItem() {
-    this.listService.update(this.list, {
-      items: [...this.list.items, { priority: 1, title: 'test', status: Status.Pending }],
-    });
+  submitForm() {
+    this.listService
+      .transformData(this.form.value)
+      .create()
+      .then(() => {
+        console.log('List created');
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   /**
@@ -47,7 +58,7 @@ export class ListComponent implements OnInit {
    */
   public initPane() {
     const settings: CupertinoSettings = {
-      parentElement: 'app-list', // Parent container
+      parentElement: 'app-create-item', // Parent container
       backdrop: true,
       breaks: {
         top: {
@@ -64,11 +75,11 @@ export class ListComponent implements OnInit {
       onDragEnd: () => this.paneService.onDragEnd(),
       onBackdropTap: () => this.cupertinoPane.hide(),
     };
-    this.cupertinoPane = new CupertinoPane('.pane.pane--list', settings);
+    this.cupertinoPane = new CupertinoPane('.pane.pane--create-item', settings);
 
     this.paneService.present.subscribe((type: PaneType) => {
       console.log('present');
-      if (type === PaneType.ViewList) {
+      if (type === PaneType.CreateItem) {
         this.presentPane();
       }
     });
@@ -79,12 +90,5 @@ export class ListComponent implements OnInit {
    */
   public presentPane() {
     this.cupertinoPane.present({ animate: true });
-  }
-
-  /**
-   * presentCreateItem
-   */
-  public async presentCreateItem() {
-    this.paneService.presentPane(PaneType.CreateItem);
   }
 }

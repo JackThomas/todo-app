@@ -1,0 +1,60 @@
+:host {
+  width: 100%;
+}
+
+.colour-picker {
+  width: 100%;
+
+  &__inner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    width: 100%;
+  }
+
+  &-item {
+    overflow: hidden;
+    position: relative;
+    width: calc(calc(100% / 6) - 10px);
+    border-radius: 100px;
+
+    &__inner {
+      position: relative;
+      width: 100%;
+      height: 0;
+      padding-bottom: 100%;
+    }
+
+    &__check {
+      font-size: 12px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: absolute;
+      z-index: 5;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      margin: 2px;
+      color: #ffffff;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 100px;
+
+      mix-blend-mode: hard-light;
+
+      svg {
+        fill: currentColor;
+      }
+    }
+
+    &__background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: var(--colour-picker-background);
+    }
+  }
+}

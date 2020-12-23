@@ -1,11 +1,10 @@
 import { AfterViewInit, Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { iosLeaveAnimation } from 'src/app/animations/modal/fade-out/fade-out';
-import { ListPage } from 'src/app/pages/create/list/list.page';
 import { List } from 'src/app/interfaces/list';
 import { ListService } from 'src/app/services/list/list.service';
 import { listItemFadeIn } from 'src/app/animations/list-item/fade-in/fade-in';
 import { PaneService } from 'src/app/services/pane/pane.service';
+import { PaneType } from 'src/app/enums/paneTypes.enum';
 @Component({
   selector: 'app-group-slider',
   templateUrl: './group-slider.component.html',
@@ -21,14 +20,10 @@ export class GroupSliderComponent implements OnInit, AfterViewInit {
     centeredSlides: false,
     pagination: false,
     freeMode: true,
-    freeModeSticky: true,
+    freeModeMomentumRatio: 2,
   };
 
-  constructor(
-    private listService: ListService,
-    private paneService: PaneService,
-    private modalCtrl: ModalController
-  ) {}
+  constructor(private listService: ListService, private paneService: PaneService) {}
 
   ngOnInit() {}
 
@@ -64,19 +59,13 @@ export class GroupSliderComponent implements OnInit, AfterViewInit {
    */
   selectList(list: List) {
     this.listService.select(list);
-    this.paneService.presentPane();
+    this.paneService.presentPane(PaneType.ViewList);
   }
 
   /**
-   * presentModal
+   * presentCreateList
    */
   public async presentCreateList() {
-    const modal = await this.modalCtrl.create({
-      component: ListPage,
-      cssClass: 'modal modal--half',
-      swipeToClose: true,
-      leaveAnimation: iosLeaveAnimation,
-    });
-    await modal.present();
+    this.paneService.presentPane(PaneType.CreateList);
   }
 }

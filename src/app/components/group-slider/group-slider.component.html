@@ -2,11 +2,12 @@
   <ion-slide class="list-panel-slide">
     <div class="list-panel list-panel--create">
       <ion-button (click)="presentCreateList()">Create</ion-button>
+      <div class="list-panel__background"></div>
     </div>
   </ion-slide>
   <ion-slide class="list-panel-slide" *ngFor="let list of lists">
     <div
-      class="list-panel list-panel--2"
+      class="list-panel"
       (click)="selectList(list)"
       [@listItemFadeIn]="!list.active ? 'fade-in' : ''"
       (@listItemFadeIn.done)="listItemFadeInEnd($event, list)"
@@ -19,6 +20,7 @@
         >
         completed
       </p> -->
+      <div class="list-panel__background" [style.--background]="list.colour.hex"></div>
     </div>
   </ion-slide>
 </ion-slides>

@@ -1,0 +1,24 @@
+<div class="cupertino-pane pane pane--create-list">
+  <h1>create</h1>
+  <div class="body" hide-on-bottom overflow-y>
+    <form [formGroup]="form">
+      <ion-list>
+        <ion-item>
+          <ion-label position="stacked">Title</ion-label>
+          <ion-input inputMode="text" formControlName="name"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="stacked">Colour</ion-label>
+          <app-colour-picker formControlName="colour"></app-colour-picker>
+        </ion-item>
+      </ion-list>
+    </form>
+    <div class="body-fixed">
+      <div class="body-fixed__inner">
+        <ion-button type="submit" expand="block" (click)="submitForm()" [disabled]="!form?.valid">
+          Create
+        </ion-button>
+      </div>
+    </div>
+  </div>
+</div>

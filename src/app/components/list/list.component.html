@@ -1,19 +1,9 @@
-<!-- <div *ngIf="list">
-  <div class="cupertino-pane">
-    <h1>{{ list.title }}</h1>
-    <div class="body" hide-on-bottom overflow-y>
-      <p *ngFor="let item of list.items">{{ item.title }}</p>
-      <ion-button (click)="addItem()">+</ion-button>
-    </div>
-  </div>
-</div> -->
-
-<div class="cupertino-pane">
+<div class="cupertino-pane pane pane--list">
   <div *ngIf="list">
     <h1>{{ list.title }}</h1>
     <div class="body" hide-on-bottom overflow-y>
       <p *ngFor="let item of list.items">{{ item.title }}</p>
-      <ion-button (click)="addItem()">+</ion-button>
+      <ion-button (click)="presentCreateItem()">+</ion-button>
     </div>
   </div>
 </div>

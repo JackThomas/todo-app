@@ -1,0 +1,19 @@
+<div class="colour-picker">
+  <input type="hidden" [name]="formControlName" [value]="selected" />
+
+  <div class="colour-picker__inner">
+    <div
+      class="colour-picker-item"
+      *ngFor="let colour of colours"
+      (click)="select(colour)"
+      [style.--colour-picker-background]="colour.hex"
+    >
+      <div class="colour-picker-item__inner">
+        <div *ngIf="selected === colour" class="colour-picker-item__check">
+          <ion-icon src="assets/icons/check.svg"></ion-icon>
+        </div>
+        <div class="colour-picker-item__background"></div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,17 @@
+<div class="cupertino-pane pane pane--create-item">
+  <h1>create item</h1>
+  <div class="body" hide-on-bottom overflow-y>
+    <form [formGroup]="form" (ngSubmit)="submitForm()">
+      <ion-list>
+        <ion-item>
+          <ion-label position="stacked">Title</ion-label>
+          <ion-input inputMode="text" formControlName="name"></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-button type="submit" expand="block"> Create </ion-button>
+        </ion-item>
+      </ion-list>
+    </form>
+  </div>
+</div>

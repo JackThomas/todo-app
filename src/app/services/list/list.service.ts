@@ -1,9 +1,8 @@
-import { DataService } from 'src/app/services/data/data.service';
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+import { DataService } from 'src/app/services/data/data.service';
 import { List } from 'src/app/interfaces/list';
 import { v4 as uuid } from 'uuid';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 const listStorageKey = 'lists';
 
@@ -139,10 +138,7 @@ export class ListService {
 
     this.data = {
       active: false,
-      colour: {
-        name: 'Blue Green',
-        hex: '#168db9',
-      },
+      colour: data.colour,
       created: new Date(),
       id: uuid(),
       items: [],

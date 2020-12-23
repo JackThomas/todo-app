@@ -1,0 +1,24 @@
+/* --------------------------------
+   Cupertino Pane
+   -------------------------------- */
+
+.cupertino-pane-wrapper {
+  display: flex;
+  flex-direction: column;
+
+  > .pane {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+  }
+
+  .cupertino-pane {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+  }
+
+  .body {
+    flex-grow: 1;
+  }
+}
