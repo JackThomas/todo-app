@@ -33,7 +33,7 @@ const TaskCreator = () => {
     };
 
     return (
-        <div className="w-full max-w-3xl mx-auto p-4">
+        <div className="w-full mx-auto">
             <div
                 className={`relative bg-gray-50 rounded-lg p-4 border ${
                     isFocused ? "border-blue-500" : "border-gray-200"
@@ -56,7 +56,7 @@ const TaskCreator = () => {
                         onFocus={() => setIsFocused(true)}
                         onBlur={() => setIsFocused(false)}
                         className="w-full bg-transparent resize-none outline-none min-h-[100px] pr-16 pb-12"
-                        placeholder="Ask AI a question or make a request..."
+                        placeholder="Add new task..."
                         rows={1}
                         style={{ height: "auto", minHeight: "24px" }}
                     />
@@ -77,13 +77,11 @@ const TaskCreator = () => {
                                 </SelectItem>
                             </SelectContent>
                         </Select>
-                        <div className="text-xs text-gray-400 ml-[auto]">
-                            {input.length}/{maxLength}
-                        </div>
+
                         <Button
                             size="icon"
                             variant="ghost"
-                            className="h-8 w-8 text-gray-400 hover:text-gray-600"
+                            className="h-8 w-8 text-gray-400 hover:text-gray-600 ml-auto"
                             onClick={() => {
                                 console.log("Sending:", input);
                                 setInput("");

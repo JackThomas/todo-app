@@ -64,7 +64,7 @@ const TaskItem = ({ parent, id, title, onEdit, onDelete }: TaskItemProps) => {
                 </TaskContent>
             </div>
 
-            <div className="ml-[auto]">
+            <div className="ml-auto">
                 <TaskMenu onDelete={handleDelete} onEdit={handleEdit} />
             </div>
         </TaskWrapper>

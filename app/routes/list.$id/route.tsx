@@ -12,6 +12,7 @@ import { TaskForm, TaskFormSchema } from "~/components/core/task-form";
 import { TaskCreator } from "~/components/core/task/task-creator";
 import { TaskList } from "~/components/core/task/task-list";
 import { TaskListPlaceholder } from "~/components/core/task/task-list-placeholder";
+import { DefaultLayout } from "~/components/layout/default-layout";
 import { Button } from "~/components/ui/button";
 import {
     Popover,
@@ -76,6 +77,8 @@ export default function Index() {
     const [color, setColor] = useAtom(colorAtom);
     const colorName = color?.name ?? "slate";
 
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
     const handleCreateTask = (data: z.infer<typeof TaskFormSchema>) => {
         setItems((prev) => [
             ...prev,
@@ -127,8 +130,6 @@ export default function Index() {
         }
     }, [title, revalidator]);
 
-    const [isModalOpen, setIsModalOpen] = useState(false);
-
     const onModalClose = () => {
         setIsModalOpen(false);
         setIsEditing(false);
@@ -146,92 +147,100 @@ export default function Index() {
     // TODO: Add 404 page for invalid list id
 
     return (
-        <div
-            key={`task_list_${id}`}
-            className="flex flex-1 flex-col gap-4 p-4 pt-0"
-        >
-            <EditableTitle initialTitle={title} onChange={handleTitleChange} />
-
-            <Separator className="mt-2 mb-1" />
-
-            <div className="flex gap-4">
-                <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={handleOnFeatured}
-                    title="Toggle favourite"
-                >
-                    <StarIcon
-                        fill={
-                            isFeatured
-                                ? "hsl(var(--color-yellow-400))"
-                                : "hsl(var(--color-slate-200))"
-                        }
-                        className="transition"
-                        strokeWidth={0}
-                    />
-                </Button>
-                <Popover>
-                    <PopoverTrigger asChild>
-                        <Button
-                            size="icon"
-                            className="aspect-square"
-                            style={{
-                                background: `hsl(var(--color-${colorName}-600))`,
-                            }}
-                        >
-                            <PaletteIcon />
-                        </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-60">
-                        <ColorSelector onChange={setColor} />
-                    </PopoverContent>
-                </Popover>
-                <Button
-                    variant="ghost"
-                    onClick={() => {
-                        setIsModalOpen(true);
-                    }}
-                    title="Create new task"
-                >
-                    <PlusIcon />
-                    <span>New Task</span>
-                </Button>
-            </div>
-
-            {items?.length === 0 && <TaskListPlaceholder />}
-
-            {items && items.length > 0 && (
-                <TaskList
-                    id={id}
-                    items={items}
-                    onUpdateItems={setItems}
-                    onEdit={handleEditTask}
-                    onDelete={handleDeleteTask}
-                />
-            )}
-
-            <TaskCreator />
-
-            <Modal
-                isOpen={isModalOpen}
-                onClose={onModalClose}
-                title={isEditing ? "Edit Task" : "Create Task"}
+        <DefaultLayout>
+            <div
+                key={`task_list_${id}`}
+                className="flex flex-1 flex-col gap-4 p-4 pt-0 w-full max-w-4xl mx-auto"
             >
-                <TaskForm
-                    onSubmit={handleSubmit}
-                    {...(isEditing && {
-                        edit: {
-                            id: editingId!,
-                            payload: {
-                                ...(items ?? []).find(
-                                    (task) => task.id === editingId
-                                )!,
-                            },
-                        },
-                    })}
+                <EditableTitle
+                    initialTitle={title}
+                    onChange={handleTitleChange}
                 />
-            </Modal>
-        </div>
+
+                <Separator className="mt-2 mb-1" />
+
+                <div className="flex gap-4">
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={handleOnFeatured}
+                        title="Toggle featured"
+                    >
+                        <StarIcon
+                            fill={
+                                isFeatured
+                                    ? "hsl(var(--color-yellow-400))"
+                                    : "hsl(var(--color-slate-200))"
+                            }
+                            stroke={
+                                isFeatured
+                                    ? "hsl(var(--color-yellow-400))"
+                                    : "hsl(var(--color-slate-200))"
+                            }
+                            className="transition"
+                        />
+                    </Button>
+                    <Popover>
+                        <PopoverTrigger asChild>
+                            <Button
+                                size="icon"
+                                className="aspect-square"
+                                style={{
+                                    background: `hsl(var(--color-${colorName}-600))`,
+                                }}
+                            >
+                                <PaletteIcon />
+                            </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-60">
+                            <ColorSelector onChange={setColor} />
+                        </PopoverContent>
+                    </Popover>
+                    <Button
+                        variant="ghost"
+                        onClick={() => {
+                            setIsModalOpen(true);
+                        }}
+                        title="Create new task"
+                    >
+                        <PlusIcon />
+                        <span>New Task</span>
+                    </Button>
+                </div>
+
+                {items?.length === 0 && <TaskListPlaceholder />}
+
+                {items && items.length > 0 && (
+                    <TaskList
+                        id={id}
+                        items={items}
+                        onUpdateItems={setItems}
+                        onEdit={handleEditTask}
+                        onDelete={handleDeleteTask}
+                    />
+                )}
+                <TaskCreator />
+
+                <Modal
+                    isOpen={isModalOpen}
+                    onClose={onModalClose}
+                    title={isEditing ? "Edit Task" : "Create Task"}
+                >
+                    <TaskForm
+                        onSubmit={handleSubmit}
+                        {...(isEditing && {
+                            edit: {
+                                id: editingId!,
+                                payload: {
+                                    ...(items ?? []).find(
+                                        (task) => task.id === editingId
+                                    )!,
+                                },
+                            },
+                        })}
+                    />
+                </Modal>
+            </div>
+        </DefaultLayout>
     );
 }
