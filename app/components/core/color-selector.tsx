@@ -1,5 +1,5 @@
-import { Check } from "lucide-react";
-import { useEffect, useState } from "react";
+import { CheckIcon } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "~/components/ui/button";
 import { colors as palette } from "~/lib/colors";
 
@@ -18,6 +18,7 @@ interface ColorSelectorProps {
 
 const ColorSelector = ({ onChange }: ColorSelectorProps) => {
     const [selected, setSelected] = useState(colors[0]);
+    const selectedRef = useRef(selected);
 
     const handleSelectColor = (
         e: React.MouseEvent<HTMLButtonElement>,
@@ -28,7 +29,10 @@ const ColorSelector = ({ onChange }: ColorSelectorProps) => {
     };
 
     useEffect(() => {
-        onChange(selected);
+        if (selectedRef.current !== selected) {
+            onChange(selected);
+            selectedRef.current = selected;
+        }
     }, [selected, onChange]);
 
     return (
@@ -36,22 +40,25 @@ const ColorSelector = ({ onChange }: ColorSelectorProps) => {
             <div className="grid grid-cols-4 gap-2">
                 {colors.map((color) => (
                     <Button
+                        // focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-gray-400
                         key={color.name}
-                        className={`w-full aspect-square focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-gray-400 h-[auto] ${
+                        className={`w-full aspect-square h-[auto] ${
                             selected.name === color.name
-                                ? "ring-2 ring-offset-2 ring-offset-white ring-gray-400"
+                                ? "ring ring-2 ring-offset-2 ring-offset-white ring-gray-400"
                                 : ""
                         }`}
-                        style={{
-                            backgroundColor: color.hex,
-                            "--tw-ring-color": `var(--color-${color.name}-300`,
-                        }}
+                        style={
+                            {
+                                backgroundColor: `hsl(var(--color-${color.name}-500))`,
+                                "--tw-ring-color": `hsl(var(--color-${color.name}-300))`,
+                            } as React.CSSProperties
+                        }
                         onClick={(e) => handleSelectColor(e, color)}
                         aria-label={`Select ${color.name} color`}
                         aria-pressed={selected.name === color.name}
                     >
                         {selected.name === color.name && (
-                            <Check className="w-6 h-6 text-white mx-auto" />
+                            <CheckIcon className="w-6 h-6 text-white mx-auto" />
                         )}
                     </Button>
                 ))}

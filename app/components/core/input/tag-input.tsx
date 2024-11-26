@@ -1,94 +1,89 @@
-import { useCallback, useState } from "react";
+import { PaletteIcon, PlusIcon } from "lucide-react";
+import { useCallback, useMemo, useState } from "react";
+import { ColorSelector, type Color } from "~/components/core/color-selector";
+import { Tag } from "~/components/core/tag";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
-import { Label } from "~/components/ui/label";
-import { type Color, ColorSelector } from "../color-selector";
-
-interface Tag {
-    id: string;
-    label: string;
-    color?: Color;
-}
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "~/components/ui/popover";
+import { TagType } from "~/types/tag.type";
 
 interface TagInputProps {
-    tags?: Tag[];
-    setTags: (tags: Tag[]) => void;
+    value?: TagType[];
+    onChange: (tags: TagType[]) => void;
 }
 
-const TagInput = ({ tags, setTags }: TagInputProps) => {
+const TagInput = ({ value, onChange }: TagInputProps) => {
+    const tags = useMemo(() => value ?? [], [value]);
     const [title, setTitle] = useState("");
     const [color, setColor] = useState<Color | undefined>();
+    const colorName = color?.name ?? "slate";
 
     const handleDelete = (id: string) => {
-        setTags((tags ?? []).filter((tag) => tag?.id != id));
+        const nextTags = (tags ?? []).filter((tag) => tag.id !== id);
+        onChange(nextTags);
     };
 
     const createTag = useCallback(
         (e: React.MouseEvent<HTMLButtonElement>) => {
             e.preventDefault();
             if (title.trim()) {
-                const nextTag: Tag = {
+                const nextTag: TagType = {
                     id: `${Date.now()}`,
                     label: title.trim(),
                     color,
                 };
-                setTags([...(tags ?? []), nextTag]);
+                onChange([...(tags ?? []), nextTag]);
                 setTitle("");
                 setColor(undefined);
             }
         },
-        [title, color, tags, setTags]
+        [title, color, tags, onChange]
     );
 
     return (
         <>
-            <div>
-                <Label htmlFor="title">Tag Title</Label>
+            <div className="flex gap-2">
                 <Input
                     id="label"
                     type="text"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
-                    placeholder="Enter tag title"
+                    placeholder="Label"
                 />
-            </div>
-            <div>
-                <Label htmlFor="color">Tag Color</Label>
-                <div className="flex items-center space-x-2">
-                    <ColorSelector onChange={setColor} />
-                </div>
-            </div>
-            <Button onClick={createTag} className="w-full">
-                Add Tag
-            </Button>
 
-            <div className="mt-6">
-                <h3 className="text-lg font-semibold mb-2">Created Tags:</h3>
-                <div className="space-y-2">
-                    {(tags ?? []).map((tag) => (
-                        <div
-                            key={tag.id}
-                            className="flex items-center justify-between p-2 bg-gray-100 rounded"
+                <Popover>
+                    <PopoverTrigger asChild>
+                        <Button
+                            size="icon"
+                            className="aspect-square"
+                            style={{
+                                background: `hsl(var(--color-${colorName}-600))`,
+                            }}
                         >
-                            <div className="flex items-center space-x-2">
-                                <div
-                                    className="w-6 h-6 rounded"
-                                    style={{
-                                        backgroundColor: tag.color?.hex,
-                                    }}
-                                ></div>
-                                <span>{tag.label}</span>
-                            </div>
-                            <Button
-                                variant="destructive"
-                                size="sm"
-                                onClick={() => handleDelete(tag.id)}
-                            >
-                                Delete
-                            </Button>
-                        </div>
-                    ))}
-                </div>
+                            <PaletteIcon />
+                        </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-60">
+                        <ColorSelector onChange={setColor} />
+                    </PopoverContent>
+                </Popover>
+                <Button
+                    size="icon"
+                    onClick={createTag}
+                    className="aspect-square"
+                >
+                    <PlusIcon />
+                </Button>
+            </div>
+
+            <div className="flex flex-wrap gap-2 pt-2">
+                {tags.map((tag) => (
+                    <Tag key={tag.id} {...tag} onDelete={handleDelete} />
+                ))}
             </div>
         </>
     );

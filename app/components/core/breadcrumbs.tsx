@@ -10,9 +10,11 @@ import {
 
 const Breadcrumbs = () => {
     const matches = useMatches();
+
     const filtered = matches.filter(
         (match) => match.handle && match.handle?.breadcrumb
     );
+
     const crumbs = filtered.map((match, index) => {
         const { id, handle } = match;
         const { href, label } = handle.breadcrumb(match);

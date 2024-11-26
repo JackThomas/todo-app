@@ -52,12 +52,12 @@ npm run start
 ### Tasks
 
 -   Home
-    -   Hook up page pods and list view to real tasks
+    -   ~~Hook up page pods to real tasks~~
+    -   Hook up list view to real tasks
 -   Tasks
-    -   Add time range to date picker
-    -   Add ability to create featured lists
-    -   Add colour to list
-    -   Tidy up create/edit form
+    -   ~~Add time range to task form~~
+    -   ~~Add ability to create featured lists~~
+    -   ~~Tidy up create/edit form~~
 -   General
     -   Use motion to implement animations (task entry/exit animations)
 

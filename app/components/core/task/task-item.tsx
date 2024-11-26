@@ -1,14 +1,13 @@
 import { useAtom, useAtomValue } from "jotai";
-import { focusAtom } from "jotai-optics";
-import { useCallback, useMemo } from "react";
+import { useCallback } from "react";
+import { TaskContent } from "~/components/core/task/task-content";
+import { TaskDate } from "~/components/core/task/task-date";
+import { TaskMenu } from "~/components/core/task/task-menu";
+import { TaskTags } from "~/components/core/task/task-tags";
+import { TaskTitle } from "~/components/core/task/task-title";
+import { TaskWrapper } from "~/components/core/task/task-wrapper";
 import { Checkbox } from "~/components/ui/checkbox";
-import { todosAtom } from "~/state/todos.state";
-import { TaskContent } from "./task-content";
-import { TaskDate } from "./task-date";
-import { TaskMenu } from "./task-menu";
-import { TaskTags } from "./task-tags";
-import { TaskTitle } from "./task-title";
-import { TaskWrapper } from "./task-wrapper";
+import { useItemState } from "~/hooks/use-item-state";
 
 interface TaskItemProps {
     parent: string;
@@ -19,39 +18,17 @@ interface TaskItemProps {
 }
 
 const TaskItem = ({ parent, id, title, onEdit, onDelete }: TaskItemProps) => {
-    const itemAtom = useMemo(
-        () =>
-            focusAtom(todosAtom, (optic) =>
-                optic
-                    .find((list) => list.id === parent)
-                    .optional()
-                    .prop("items")
-                    .find((item) => item.id === id)
-            ),
-        [parent, id]
+    const { isCompleteAtom, dateAtom, timeRangeAtom, tagsAtom } = useItemState(
+        parent,
+        id
     );
 
-    const itemCompleteAtom = useMemo(
-        () =>
-            focusAtom(itemAtom, (optic) => optic.optional().prop("completed")),
-        [itemAtom]
-    );
+    const [isComplete, setIsComplete] = useAtom(isCompleteAtom);
+    const date = useAtomValue(dateAtom);
+    const timeRange = useAtomValue(timeRangeAtom);
+    const tags = useAtomValue(tagsAtom);
 
-    const itemDueDateAtom = useMemo(
-        () => focusAtom(itemAtom, (optic) => optic.optional().prop("dueDate")),
-        [itemAtom]
-    );
-
-    const itemTagsAtom = useMemo(
-        () => focusAtom(itemAtom, (optic) => optic.optional().prop("tags")),
-        [itemAtom]
-    );
-
-    const [isComplete, setIsComplete] = useAtom(itemCompleteAtom);
-    const dueDate = useAtomValue(itemDueDateAtom);
-    const tags = useAtomValue(itemTagsAtom);
-
-    const handleOnChange = () => {
+    const handleOnComplete = () => {
         setIsComplete((prev) => !prev);
     };
 
@@ -68,15 +45,19 @@ const TaskItem = ({ parent, id, title, onEdit, onDelete }: TaskItemProps) => {
             <div className="flex items-top space-x-4 grow p-[0.35rem]">
                 <Checkbox
                     id={`task_${id}`}
-                    onCheckedChange={handleOnChange}
+                    onCheckedChange={handleOnComplete}
                     checked={isComplete}
                 />
 
                 <TaskContent>
                     <TaskTitle id={id} isComplete={isComplete} title={title} />
 
-                    {dueDate && (
-                        <TaskDate date={dueDate} isComplete={isComplete} />
+                    {date && (
+                        <TaskDate
+                            date={date}
+                            timeRange={timeRange}
+                            isComplete={isComplete}
+                        />
                     )}
 
                     {tags && <TaskTags tags={tags} />}

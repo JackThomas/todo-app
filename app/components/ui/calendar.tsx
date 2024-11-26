@@ -1,9 +1,9 @@
+import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import * as React from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import { DayPicker } from "react-day-picker";
 
-import { cn } from "~/lib/utils";
 import { buttonVariants } from "~/components/ui/button";
+import { cn } from "~/lib/utils";
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker> & {
     classNames?: Record<string, string>;
@@ -15,7 +15,6 @@ function Calendar({
     className,
     classNames,
     showOutsideDays = true,
-    mode,
     ...props
 }: CalendarProps) {
     return (
@@ -37,11 +36,11 @@ function Calendar({
                 table: "w-full border-collapse space-y-1",
                 head_row: "flex",
                 head_cell:
-                    "text-muted-foreground rounded-md w-8 font-normal text-[0.8rem]",
+                    "text-neutral-500 rounded-md w-8 font-normal text-[0.8rem] dark:text-neutral-400",
                 row: "flex w-full mt-2",
                 cell: cn(
-                    "relative p-0 text-center text-sm focus-within:relative focus-within:z-20 [&:has([aria-selected])]:bg-accent [&:has([aria-selected].day-outside)]:bg-accent/50 [&:has([aria-selected].day-range-end)]:rounded-r-md",
-                    mode === "range"
+                    "relative p-0 text-center text-sm focus-within:relative focus-within:z-20 [&:has([aria-selected])]:bg-neutral-100 [&:has([aria-selected].day-outside)]:bg-neutral-100/50 [&:has([aria-selected].day-range-end)]:rounded-r-md dark:[&:has([aria-selected])]:bg-neutral-800 dark:[&:has([aria-selected].day-outside)]:bg-neutral-800/50",
+                    props.mode === "range"
                         ? "[&:has(>.day-range-end)]:rounded-r-md [&:has(>.day-range-start)]:rounded-l-md first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md"
                         : "[&:has([aria-selected])]:rounded-md"
                 ),
@@ -52,19 +51,21 @@ function Calendar({
                 day_range_start: "day-range-start",
                 day_range_end: "day-range-end",
                 day_selected:
-                    "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground",
-                day_today: "bg-accent text-accent-foreground",
+                    "bg-neutral-900 text-neutral-50 hover:bg-neutral-900 hover:text-neutral-50 focus:bg-neutral-900 focus:text-neutral-50 dark:bg-neutral-50 dark:text-neutral-900 dark:hover:bg-neutral-50 dark:hover:text-neutral-900 dark:focus:bg-neutral-50 dark:focus:text-neutral-900",
+                day_today:
+                    "bg-neutral-100 text-neutral-900 dark:bg-neutral-800 dark:text-neutral-50",
                 day_outside:
-                    "day-outside text-muted-foreground aria-selected:bg-accent/50 aria-selected:text-muted-foreground",
-                day_disabled: "text-muted-foreground opacity-50",
+                    "day-outside text-neutral-500 aria-selected:bg-neutral-100/50 aria-selected:text-neutral-500 dark:text-neutral-400 dark:aria-selected:bg-neutral-800/50 dark:aria-selected:text-neutral-400",
+                day_disabled:
+                    "text-neutral-500 opacity-50 dark:text-neutral-400",
                 day_range_middle:
-                    "aria-selected:bg-accent aria-selected:text-accent-foreground",
+                    "aria-selected:bg-neutral-100 aria-selected:text-neutral-900 dark:aria-selected:bg-neutral-800 dark:aria-selected:text-neutral-50",
                 day_hidden: "invisible",
                 ...classNames,
             }}
             components={{
-                IconLeft: () => <ChevronLeft className="h-4 w-4" />,
-                IconRight: () => <ChevronRight className="h-4 w-4" />,
+                IconLeft: () => <ChevronLeftIcon className="h-4 w-4" />,
+                IconRight: () => <ChevronRightIcon className="h-4 w-4" />,
             }}
             {...props}
         />

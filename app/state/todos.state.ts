@@ -1,5 +1,6 @@
 import { atomWithStorage } from "jotai/utils";
 import { nanoid } from "nanoid";
+import { ListType } from "~/types/list.type";
 
 const initial = [
     {
@@ -42,7 +43,7 @@ const initial = [
     },
 ];
 
-const todosAtom = atomWithStorage("todos", initial, undefined, {
+const todosAtom = atomWithStorage<ListType[]>("todos", initial, undefined, {
     getOnInit: true,
 });
 

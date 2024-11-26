@@ -9,6 +9,7 @@ import { useTodosState } from "~/hooks/use-todos-state";
 
 const SidebarMenuTasks = () => {
     const { lists } = useTodosState();
+
     return (
         <SidebarMenu>
             {lists.map((list) => (

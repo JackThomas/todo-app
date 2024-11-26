@@ -1,6 +1,6 @@
 interface TaskTitleProps {
     id: string;
-    isComplete: boolean;
+    isComplete?: boolean;
     title: string;
 }
 

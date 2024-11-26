@@ -1,7 +1,9 @@
+import { format } from "date-fns";
 import { useAtom } from "jotai";
 import { focusAtom } from "jotai-optics";
 import { nanoid } from "nanoid";
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
+import { isToday } from "~/helpers/date";
 import { todosAtom } from "~/state/todos.state";
 
 export function useTodosState() {
@@ -14,39 +16,38 @@ export function useTodosState() {
                 title,
                 description: "",
                 items: [],
+                featured: false,
             };
             setLists((prev) => [...prev, newList]);
         },
         [setLists]
     );
 
-    const getListState = useCallback((id: string) => {
+    const getFeaturedListsAtom = useMemo(() => {
         return focusAtom(todosAtom, (optic) =>
-            optic.find((list) => list.id === id)
+            optic.filter((list) => list?.featured === true)
         );
     }, []);
 
-    const getListTitleAtom = useCallback(
-        (id: string) => {
-            const atom = getListState(id);
-            return focusAtom(atom, (optic) => optic.optional().prop("title"));
-        },
-        [getListState]
-    );
+    const getTodaysTasksAtom = useMemo(() => {
+        return focusAtom(todosAtom, (optic) =>
+            optic.filter((list) => {
+                if (!list?.items) {
+                    return false;
+                }
 
-    const getListTasksAtom = useCallback(
-        (id: string) => {
-            const atom = getListState(id);
-            return focusAtom(atom, (optic) => optic.optional().prop("items"));
-        },
-        [getListState]
-    );
+                return true;
+                return list.items.some((item) =>
+                    item.date ? isToday(item.date) : false
+                );
+            })
+        );
+    }, []);
 
     return {
         lists: lists ?? [],
         createList,
-        getListState,
-        getListTitleAtom,
-        getListTasksAtom,
+        getFeaturedListsAtom,
+        getTodaysTasksAtom,
     };
 }

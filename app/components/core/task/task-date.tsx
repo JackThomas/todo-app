@@ -1,16 +1,19 @@
 import { format, getUnixTime } from "date-fns";
-import { Calendar } from "lucide-react";
+import { CalendarIcon } from "lucide-react";
 import { useMemo } from "react";
+import { isToday as isTodayFn } from "~/helpers/date";
 
 interface TaskDateProps {
     date: Date;
+    timeRange?: {
+        start: string;
+        end: string;
+    };
     isComplete?: boolean;
 }
 
-const TaskDate = ({ date, isComplete }: TaskDateProps) => {
-    const isToday =
-        format(date, "yyyy-MM-dd") === format(new Date(), "yyyy-MM-dd");
-
+const TaskDate = ({ date, timeRange, isComplete }: TaskDateProps) => {
+    const isToday = isTodayFn(date);
     const isTomorrow =
         format(date, "yyyy-MM-dd") ===
         format(
@@ -48,10 +51,21 @@ const TaskDate = ({ date, isComplete }: TaskDateProps) => {
         return format(date, "E	do MMM");
     }, [date, isToday, isTomorrow, isPast, isComplete]);
 
+    const timeRangeString = useMemo(() => {
+        if (timeRange) {
+            return `${timeRange.start} - ${timeRange.end} `;
+        }
+
+        return "";
+    }, [timeRange]);
+
     return (
         <div className="flex items-center gap-1 transition" style={{ color }}>
-            <Calendar size={14} />
-            <span className="text-sm">{dateString}</span>
+            <CalendarIcon size={14} />
+            <span className="text-sm">
+                {timeRangeString}
+                {dateString}
+            </span>
         </div>
     );
 };

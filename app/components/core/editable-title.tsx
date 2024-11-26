@@ -1,9 +1,9 @@
 "use client";
 
+import { CheckIcon, PencilIcon } from "lucide-react";
 import { useCallback, useState } from "react";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
-import { Pencil, Check } from "lucide-react";
 
 interface EditableTitleProps {
     initialTitle?: string;
@@ -77,9 +77,9 @@ const EditableTitle = ({
                 }`}
             >
                 {isEditing ? (
-                    <Check className="h-4 w-4" />
+                    <CheckIcon className="h-4 w-4" />
                 ) : (
-                    <Pencil className="h-4 w-4" />
+                    <PencilIcon className="h-4 w-4" />
                 )}
             </Button>
         </div>

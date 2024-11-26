@@ -1,5 +1,7 @@
-import { Plus } from "lucide-react";
+import { PlusIcon } from "lucide-react";
 import { Logo } from "~/components/core/logo";
+import { SidebarMenuFooter } from "~/components/core/sidebar/sidebar-menu-footer";
+import { SidebarMenuTasks } from "~/components/core/sidebar/sidebar-menu-tasks";
 import { Button } from "~/components/ui/button";
 import {
     Sidebar,
@@ -11,14 +13,14 @@ import {
     SidebarHeader,
     SidebarSeparator,
 } from "~/components/ui/sidebar";
-import { SidebarMenuFooter } from "./sidebar-menu-footer";
-import { SidebarMenuTasks } from "./sidebar-menu-tasks";
 
 interface SidebarMainProps {
     handleCreateList: () => void;
 }
 
 const SidebarMain = ({ handleCreateList }: SidebarMainProps) => {
+    // TODO: Add option to delete/feature lists from sidebar
+
     return (
         <Sidebar collapsible="offcanvas">
             <SidebarHeader className="py-5">
@@ -38,7 +40,7 @@ const SidebarMain = ({ handleCreateList }: SidebarMainProps) => {
                             onClick={handleCreateList}
                             className="bg-indigo-600 hover:bg-indigo-700"
                         >
-                            <Plus />
+                            <PlusIcon />
                             <span>New List</span>
                         </Button>
                     </SidebarGroupContent>

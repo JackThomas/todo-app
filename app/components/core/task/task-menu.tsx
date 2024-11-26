@@ -1,4 +1,4 @@
-import { Ellipsis, Pencil, Trash2Icon } from "lucide-react";
+import { Ellipsis, PencilIcon, Trash2Icon } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import {
     DropdownMenu,
@@ -22,7 +22,7 @@ const TaskMenu = ({ onDelete, onEdit }: TaskMenuProps) => {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="flex flex-col gap-1">
                 <DropdownMenuItem className="cursor-pointer" onClick={onEdit}>
-                    <Pencil />
+                    <PencilIcon />
                     Edit
                 </DropdownMenuItem>
                 <DropdownMenuItem
